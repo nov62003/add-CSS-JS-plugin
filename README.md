@@ -1,0 +1,1 @@
+# OJS Plugin: Easily add CSS Stylesheets / JS Files to head
