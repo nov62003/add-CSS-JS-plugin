@@ -1,5 +1,6 @@
 # OJS Plugin: Easily add CSS Stylesheets / JS Files to head
 
+- I'M STILL WORKING IN THIS PLUGIN SO INSTALL IT AT YOUR ON RISK
 - OJS Add CSS and JS Plugin<br>
 - Version: 1.0
 - Release date: June 21, 2015
