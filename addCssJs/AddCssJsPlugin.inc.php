@@ -23,6 +23,12 @@ class AddCssJsPlugin extends GenericPlugin {
 		if (parent::register($category, $path)) {
 			if ($this->getEnabled()) {
 			HookRegistry::register('TemplateManager::display', array(&$this, 'AddCssLinks'));
+			HookRegistry::register('Templates::Common::Footer::PageFooter', array($this, 'addJsToFooter'));
+			HookRegistry::register('Templates::Article::Footer::PageFooter', array($this, 'addJsToFooter'));
+			HookRegistry::register('Templates::Article::Interstitial::PageFooter', array($this, 'addJsToFooter'));
+			HookRegistry::register('Templates::Article::PdfInterstitial::PageFooter', array($this, 'addJsToFooter'));
+			HookRegistry::register('Templates::Rt::Footer::PageFooter', array($this, 'addJsToFooter'));
+			HookRegistry::register('Templates::Help::Footer::PageFooter', array($this, 'addJsToFooter'));
 			}
 			return true;
 		}
@@ -87,8 +93,7 @@ class AddCssJsPlugin extends GenericPlugin {
 			
 			if ($currentJournal) {
 				$addCssURL = $this->getSetting($currentJournal->getId(), 'addCssURL');
-				$addJsURL = $this->getSetting($currentJournal->getId(), 'addJsURL');
-				
+				$addJsURL = $this->getSetting($currentJournal->getId(), 'addJsURL');				
 				$additionalHeadData = $templateMgr->get_template_vars('additionalHeadData');
 				
 				if ($addCssURL) {
@@ -96,8 +101,7 @@ class AddCssJsPlugin extends GenericPlugin {
 					$extraCssUrls = "";
 					foreach ($CssToAdd as $newCss) {						
 						$extraCssUrls .= '<link rel="stylesheet" href="'.$newCss.'" type="text/css" />';
-					}
-					
+					}					
 					$AddToHeadCssUrls = $extraCssUrls;
 				}	
 
@@ -106,19 +110,46 @@ class AddCssJsPlugin extends GenericPlugin {
 					$extraJsUrls = "";
 					foreach ($JsToAdd as $newJS) {
 						$extraJsUrls .= '<script src="'.$newJS.'"></script>';
-					}
-					
+					}				
 					$AddToHeadJsUrls = $extraJsUrls;
 				}
 			
 			$templateMgr->assign('additionalHeadData', $additionalHeadData."\n\t".$AddToHeadCssUrls."\n\t".$AddToHeadJsUrls);
-			}
 			
+			}			
 		}
 
 		return false;
 	}
 	
+	/**
+	 * Add to footer external / uploaded to server JS
+	 */
+
+	function addJsToFooter($hookName, $params) {
+		$smarty =& $params[1];
+		$output =& $params[2];
+		$templateMgr =& TemplateManager::getManager();
+		$currentJournal = $templateMgr->get_template_vars('currentJournal');
+
+		if (!empty($currentJournal)) {
+			$journal =& Request::getJournal();
+			$journalId = $journal->getId();
+			$addJsURLFooter = $this->getSetting($journalId, 'addJsURLFooter');				
+			$JsToAddFooter = explode(",", $addJsURLFooter);	
+			$extraJsUrlsFooter = "";
+			foreach ($JsToAddFooter as $newJsFooter) {						
+				$extraJsUrlsFooter .= '<script src="'.$newJsFooter.'"></script>';
+			}
+			
+			$AddToFooterJsUrls = $extraJsUrlsFooter;
+
+			$templateMgr->assign('AddToFooterJsUrls', $AddToFooterJsUrls);
+			
+			$output .= $templateMgr->fetch($this->getTemplatePath() . 'footerJs.tpl');			
+		}
+		return false;
+	}
 
 	/**
 	 * Display verbs for the management interface.

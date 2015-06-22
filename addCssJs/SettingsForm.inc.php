@@ -45,14 +45,14 @@ class SettingsForm extends Form {
 
 		$this->setData('addCssURL', $plugin->getSetting($journalId, 'addCssURL'));
 		$this->setData('addJsURL', $plugin->getSetting($journalId, 'addJsURL'));
+		$this->setData('addJsURLFooter', $plugin->getSetting($journalId, 'addJsURLFooter'));
 	}
 
 	/**
 	 * Assign form data to user-submitted data.
 	 */
 	function readInputData() {
-		$this->readUserVars(array('addCssURL', 'addJsURL'));
-
+		$this->readUserVars(array('addCssURL', 'addJsURL', 'addJsURLFooter'));
 	}
 
 	/**
@@ -64,8 +64,8 @@ class SettingsForm extends Form {
 
 		$plugin->updateSetting($journalId, 'addCssURL', $this->getData('addCssURL'));
 		$plugin->updateSetting($journalId, 'addJsURL', $this->getData('addJsURL'));
+		$plugin->updateSetting($journalId, 'addJsURLFooter', $this->getData('addJsURLFooter'));
 	}
-
 }
 
 ?>
