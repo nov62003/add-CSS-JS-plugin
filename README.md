@@ -8,7 +8,7 @@
 
 About
 -----
-Once enabled, this plugin for OJS 2.4 provides a form to add new CSS Stylesheets and/or JS files/libraries. They will be included just before the closing </head> tag.
+Once enabled, this plugin for OJS 2.4 provides a form to add new CSS Stylesheets and/or JS files/libraries. They will be included just before the closing `</head>` tag.
 
 License
 -------
